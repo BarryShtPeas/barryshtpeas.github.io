@@ -1,8 +1,8 @@
 baseURL = 'https://www.lillystone.co.uk/'
 languageCode = 'en-us'
-title = 'James' technical blog'
+title = 'Lillystone Technical Blog'
 theme = 'ananke'
 
 [caches]
   [caches.images]
-    dir = ":cacheDir/images"
+    dir = ':cacheDir/images'

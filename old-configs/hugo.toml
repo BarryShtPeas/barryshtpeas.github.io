@@ -1,0 +1,8 @@
+baseURL = 'https://www.lillystone.co.uk/'
+languageCode = 'en-us'
+title = 'Lillystone Technical Blog'
+
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'

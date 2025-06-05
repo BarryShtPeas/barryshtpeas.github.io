@@ -1,7 +1,7 @@
 ---
 title: "Azure Arc Setup: Pre-Requisites and Planning Gotchas"
 date: 2025-06-04T09:00:00Z
-draft: false
+draft: true
 author: "James Lillystone"
 description: "Before onboarding your resources to Azure Arc, it's crucial to get the foundations right. This post covers connectivity, identity, OS requirements, and the most common planning oversights."
 tags: ["Azure", "Azure Arc", "Hybrid Cloud", "Cloud Management", "Governance"]

@@ -8,11 +8,99 @@
         <language>en</language>
         <copyright>James Lillystone</copyright>
         <lastBuildDate>Thu, 05 Jun 2025 10:30:57 +0000</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Part 2: Azure Arc Setup: Pre-Requisites and Planning Gotchas</title>
-        <link>http://localhost:1313/posts/2025-06-05-part-2/</link>
+        <title>Part 1: What is Azure Arc</title>
+        <link>http://localhost:1313/posts/arc/part-1/</link>
         <pubDate>Thu, 05 Jun 2025 10:30:57 +0000</pubDate>
         
-        <guid>http://localhost:1313/posts/2025-06-05-part-2/</guid>
+        <guid>http://localhost:1313/posts/arc/part-1/</guid>
+        <description>&lt;h2 id=&#34;overview&#34;&gt;Overview
+&lt;/h2&gt;&lt;p&gt;Getting started with Azure Arc is deceptively easy — but getting it right takes forethought. This post breaks down essential pre-requisites and the most common traps that derail successful deployments.&lt;/p&gt;
+&lt;h2 id=&#34;1-network-and-connectivity-requirements&#34;&gt;1. Network and Connectivity Requirements
+&lt;/h2&gt;&lt;p&gt;Azure Arc requires outbound HTTPS access on port 443 to several Azure endpoints. In restricted environments, this can be a blocker.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ &lt;strong&gt;Tip:&lt;/strong&gt; Allowlist required FQDNs rather than IPs to stay future-proof.&lt;/li&gt;
+&lt;li&gt;❗ &lt;strong&gt;Gotcha:&lt;/strong&gt; Using a transparent proxy without SSL inspection may break onboarding.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learn.microsoft.com/en-us/azure/azure-arc/servers/network-requirements&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;🔗 Microsoft Docs: Required URLs for Arc&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;2-identity-and-access-management&#34;&gt;2. Identity and Access Management
+&lt;/h2&gt;&lt;p&gt;You’ll need to register the &lt;code&gt;Microsoft.HybridCompute&lt;/code&gt; and &lt;code&gt;Microsoft.GuestConfiguration&lt;/code&gt; providers and assign roles correctly.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ &lt;strong&gt;Best Practice:&lt;/strong&gt; Use a dedicated Service Principal for onboarding at scale.&lt;/li&gt;
+&lt;li&gt;❗ &lt;strong&gt;Gotcha:&lt;/strong&gt; RBAC misconfiguration is a top reason onboarding fails silently.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;3-os-and-agent-requirements&#34;&gt;3. OS and Agent Requirements
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Supported OS: Windows Server 2012 R2+, Ubuntu 16.04+, CentOS/RHEL 7+, etc.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Ensure &lt;code&gt;Connected Machine Agent&lt;/code&gt; has local admin privileges to install properly.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;✅ &lt;strong&gt;Best Practice:&lt;/strong&gt; Bake the agent into base images for auto-onboarded VMs.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;❗ &lt;strong&gt;Gotcha:&lt;/strong&gt; Server core installations often need additional tweaks or dependencies.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;4-tagging-and-naming-standards&#34;&gt;4. Tagging and Naming Standards
+&lt;/h2&gt;&lt;p&gt;Set naming conventions and tags from the start — Arc doesn’t retro-tag easily.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Example naming format: &lt;code&gt;arc-[hostname]-[location]-[env]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Use policy to enforce tags on connected machines&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;5-region-selection-and-resource-organization&#34;&gt;5. Region Selection and Resource Organization
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Azure Arc resources are metadata-only — but they&amp;rsquo;re tied to a region for management.&lt;/li&gt;
+&lt;li&gt;Use a dedicated RG per site or environment to simplify governance.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;6-gotchas-summary&#34;&gt;6. Gotchas Summary
+&lt;/h2&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Area&lt;/th&gt;
+          &lt;th&gt;Pitfall&lt;/th&gt;
+          &lt;th&gt;Solution&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Networking&lt;/td&gt;
+          &lt;td&gt;Blocked domains&lt;/td&gt;
+          &lt;td&gt;Allowlist required URLs&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Identity&lt;/td&gt;
+          &lt;td&gt;Missing role assignments&lt;/td&gt;
+          &lt;td&gt;Use scoped Service Principals&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;OS Support&lt;/td&gt;
+          &lt;td&gt;Agent fails on unsupported systems&lt;/td&gt;
+          &lt;td&gt;Check OS compatibility first&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Governance&lt;/td&gt;
+          &lt;td&gt;Inconsistent tags/names&lt;/td&gt;
+          &lt;td&gt;Apply policies early&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;up-next&#34;&gt;Up Next
+&lt;/h2&gt;&lt;p&gt;In the next post, we’ll explore how to &lt;strong&gt;onboard resources to Azure Arc at scale&lt;/strong&gt;, including PowerShell automation, DSC integrations, and template deployments.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;Need help setting up Azure Arc for your environment? Reach out or connect with me on &lt;a class=&#34;link&#34; href=&#34;https://www.linkedin.com/in/YOUR-HANDLE&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;LinkedIn&lt;/a&gt; or &lt;a class=&#34;link&#34; href=&#34;https://github.com/BarryShtPeas&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;GitHub&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Part 2: Azure Arc Setup: Pre-Requisites and Planning Gotchas</title>
+        <link>http://localhost:1313/posts/arc/part-2/</link>
+        <pubDate>Thu, 05 Jun 2025 10:30:57 +0000</pubDate>
+        
+        <guid>http://localhost:1313/posts/arc/part-2/</guid>
         <description>&lt;h2 id=&#34;overview&#34;&gt;Overview
 &lt;/h2&gt;&lt;p&gt;Getting started with Azure Arc is deceptively easy — but getting it right takes forethought. This post breaks down essential pre-requisites and the most common traps that derail successful deployments.&lt;/p&gt;
 &lt;h2 id=&#34;1-network-and-connectivity-requirements&#34;&gt;1. Network and Connectivity Requirements

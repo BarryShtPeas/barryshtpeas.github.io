@@ -17,9 +17,6 @@ languages:
         languageName: English
         title: Azure Technical Blog
         weight: 1
-        params:
-            sidebar:
-                subtitle: Insights and practical guides on Microsoft Azure, cloud governance, and modern security tools — from architecture to implementation.
 
 services:
     # Change it to your Disqus shortname before using
@@ -53,7 +50,7 @@ params:
 
     sidebar:
         emoji: ❤️
-        subtitle: "Cloud & Security Architect · Azure · DevSecOps · Compliance & Governance"
+        subtitle: "Insights and practical guides on Microsoft Azure, cloud governance, and modern security tools — from architecture to implementation."
         avatar:
             enabled: true
             local: true

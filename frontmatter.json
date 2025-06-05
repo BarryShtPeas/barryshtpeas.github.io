@@ -4,7 +4,8 @@
     {
       "name": "default",
       "pageBundle": false,
-      "previewPath": null,
+      "previewPath": "posts",
+      "trailingSlash": true,
       "fields": [
         {
           "title": "Title",
@@ -42,6 +43,24 @@
           "title": "Categories",
           "name": "categories",
           "type": "categories"
+        },
+        {
+          "title": "author",
+          "name": "author",
+          "type": "string"
+        },
+        {
+          "title": "series",
+          "name": "series",
+          "type": "choice",
+          "choices": [
+            "Azure Arc Deep Dive"
+          ]
+        },
+        {
+          "title": "toc",
+          "name": "toc",
+          "type": "boolean"
         }
       ]
     }
@@ -55,20 +74,18 @@
       "path": "[[workspace]]/archetypes"
     },
     {
-      "title": "PaperMod",
-      "path": "[[workspace]]/themes/PaperMod"
-    },
-    {
       "title": "posts",
       "path": "[[workspace]]/content/posts"
     },
     {
-      "title": ".github",
-      "path": "[[workspace]]/themes/PaperMod/.github"
+      "path": "[[workspace]]",
+      "title": "[[workspace]]"
     },
     {
-      "path": "[[workspace]]"
+      "title": "content\\posts",
+      "path": "[[workspace]]/content/posts"
     }
   ],
-  "frontMatter.git.enabled": true
+  "frontMatter.git.enabled": true,
+  "frontMatter.website.host": "www.lillystone.co.uk/"
 }

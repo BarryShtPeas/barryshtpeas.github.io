@@ -1,11 +1,17 @@
 baseURL = "http://localhost:1313/"
 languageCode = 'en-us'
-title = ''
-theme = "PaperMod"
+title = 'Azure and Security Technical Blog'
+theme = "hugo-theme-stack"
+timeZone = "Europe/London"
 
 [caches]
   [caches.images]
     dir = ':cacheDir/images'
+
+[params]
+  mainSections = ["posts"]
+  description = "Azure + DevSecOps blog by James Lillystone"
+  favicon = "/favicon.ico"
 
 [params.homeInfoParams]
   Title = "James Lillystone"

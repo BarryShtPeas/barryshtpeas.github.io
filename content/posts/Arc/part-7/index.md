@@ -26,28 +26,7 @@ cover:
 ---
 ![Image 1](ARC.png)
 
----
-title: "Part 7: Lessons Learned and Gotchas"
-description: "Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises."
-date: 2025-06-16
-draft: false
-tags:
-  - Azure Arc
-  - Deployment
-  - Troubleshooting
-  - Cost Management
-  - Best Practices
-categories:
-  - Azure Arc
-  - Lessons Learned
-series:
-  - Azure Arc Deep Dive
-cover:
-  image: gotchas.png
-  alt: Azure Arc Challenges
-  caption: Lessons from Real-World Deployments
-  relative: true
----
+
 
 Welcome to the final part of the Azure Arc Deep Dive series. We've covered what Azure Arc is, how to plan and deploy it, and where it shines in real-world scenarios.
 

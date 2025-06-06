@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Introduction to Azure Arc: what it is, why it matters, and how it extends Azure management to on-premises, multicloud, and edge environments.">
-<title>Part 1: What is Azure Arc</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises.">
+<title>Part 7: Lessons Learned and Gotchas</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/arc/part-1/'>
+<link rel='canonical' href='http://localhost:1313/posts/arc/part-8-applying-esus/'>
 
-<link rel="stylesheet" href="/scss/style.min.cfa5b1b0e78d61c00a14173992a1f3fa3b5c1b9fa34d023de959af564e7b19dd.css"><meta property='og:title' content="Part 1: What is Azure Arc">
-<meta property='og:description' content="Introduction to Azure Arc: what it is, why it matters, and how it extends Azure management to on-premises, multicloud, and edge environments.">
-<meta property='og:url' content='http://localhost:1313/posts/arc/part-1/'>
+<link rel="stylesheet" href="/scss/style.min.cfa5b1b0e78d61c00a14173992a1f3fa3b5c1b9fa34d023de959af564e7b19dd.css"><meta property='og:title' content="Part 7: Lessons Learned and Gotchas">
+<meta property='og:description' content="Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises.">
+<meta property='og:url' content='http://localhost:1313/posts/arc/part-8-applying-esus/'>
 <meta property='og:site_name' content='Azure Technical Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='Azure' /><meta property='article:tag' content='Azure Arc' /><meta property='article:tag' content='Hybrid Cloud' /><meta property='article:tag' content='Cloud Management' /><meta property='article:tag' content='Governance' /><meta property='article:published_time' content='2025-06-05T10:30:57&#43;00:00'/><meta property='article:modified_time' content='2025-06-05T10:30:57&#43;00:00'/>
-<meta name="twitter:title" content="Part 1: What is Azure Arc">
-<meta name="twitter:description" content="Introduction to Azure Arc: what it is, why it matters, and how it extends Azure management to on-premises, multicloud, and edge environments.">
+<meta name="twitter:title" content="Part 7: Lessons Learned and Gotchas">
+<meta name="twitter:description" content="Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises.">
     </head>
     <body class="
     article-page
@@ -168,10 +168,14 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#-what-exactly-is-azure-arc">🧩 What Exactly is Azure Arc?</a></li>
-    <li><a href="#-why-use-azure-arc">🌍 Why Use Azure Arc?</a></li>
-    <li><a href="#-how-arc-works-at-a-high-level">🏗️ How Arc Works (At a High Level)</a></li>
-    <li><a href="#-coming-up">🚀 Coming Up</a></li>
+    <li><a href="#-agent-performance-and-system-overhead">🐌 Agent Performance and System Overhead</a></li>
+    <li><a href="#-monitoring-and-visibility-limitations">🧩 Monitoring and Visibility Limitations</a></li>
+    <li><a href="#-azure-policy--guest-configuration-challenges">🧱 Azure Policy &amp; Guest Configuration Challenges</a></li>
+    <li><a href="#-security-assumptions-and-identity-pitfalls">🔒 Security Assumptions and Identity Pitfalls</a></li>
+    <li><a href="#-unexpected-billing-and-defender-costs">💸 Unexpected Billing and Defender Costs</a></li>
+    <li><a href="#-operational-gaps-in-large-scale-environments">🧰 Operational Gaps in Large-Scale Environments</a></li>
+    <li><a href="#-final-thoughts">🧭 Final Thoughts</a></li>
+    <li><a href="#-thanks-for-reading">🙏 Thanks for Reading</a></li>
   </ol>
 </nav>
         </div>
@@ -203,12 +207,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/posts/arc/part-1/">Part 1: What is Azure Arc</a>
+            <a href="/posts/arc/part-8-applying-esus/">Part 7: Lessons Learned and Gotchas</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            Introduction to Azure Arc: what it is, why it matters, and how it extends Azure management to on-premises, multicloud, and edge environments.
+            Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises.
         </h3>
         
     </div>
@@ -244,7 +248,7 @@
 
 
                 <time class="article-time--reading">
-                    2 minute read
+                    3 minute read
                 </time>
             </div>
         
@@ -259,61 +263,115 @@
     <section class="article-content">
     
     
-    <p><img src="/posts/arc/part-1/ARC.png"
-	width="547"
-	height="436"
-	srcset="/posts/arc/part-1/ARC_hu_4296d6a985cc1c6.png 480w, /posts/arc/part-1/ARC_hu_dff0b6efc1c1557f.png 1024w"
+    <p><img src="/ARC.png"
+	
+	
+	
 	loading="lazy"
 	
 		alt="Image 1"
 	
 	
-		class="gallery-image" 
-		data-flex-grow="125"
-		data-flex-basis="301px"
-	
 ></p>
-<p>Welcome to the first post in the Azure Arc Deep Dive series.</p>
-<p>In today’s hybrid and multicloud world, organisations increasingly struggle to manage and secure resources across multiple environments, locations and technology stacks. Whether it&rsquo;s virtual machines running on-premises, Kubernetes clusters in AWS, or databases at the edge, Azure tools have had limited reach — until now.</p>
-<p><strong>Azure Arc</strong> bridges this gap by extending Azure’s control plane to infrastructure hosted <em>anywhere</em>. It lets you project non-Azure resources into Azure Resource Manager (ARM), enabling unified management, governance, and security across environments.</p>
 <hr>
-<h2 id="-what-exactly-is-azure-arc">🧩 What Exactly is Azure Arc?
-</h2><p>Azure Arc is a portfolio of technologies designed to bring Azure’s management, policy, and security capabilities to:</p>
+<p>title: &ldquo;Part 7: Lessons Learned and Gotchas&rdquo;
+description: &ldquo;Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises.&rdquo;
+date: 2025-06-16
+draft: false
+tags:</p>
 <ul>
-<li><strong>Servers</strong> (Windows/Linux, physical or virtual)</li>
-<li><strong>Kubernetes clusters</strong> (including AKS on-prem, EKS, GKE)</li>
-<li><strong>SQL and PostgreSQL servers</strong> (preview/built-in support)</li>
-<li><strong>Applications</strong> via App Services and Logic Apps (Arc-enabled services)</li>
+<li>Azure Arc</li>
+<li>Deployment</li>
+<li>Troubleshooting</li>
+<li>Cost Management</li>
+<li>Best Practices
+categories:</li>
+<li>Azure Arc</li>
+<li>Lessons Learned
+series:</li>
+<li>Azure Arc Deep Dive
+cover:
+image: gotchas.png
+alt: Azure Arc Challenges
+caption: Lessons from Real-World Deployments
+relative: true</li>
 </ul>
-<p>Once onboarded, these resources behave like native Azure assets — you can assign RBAC, apply policy, monitor them in Azure Monitor, and even onboard them into Defender for Cloud.</p>
 <hr>
-<h2 id="-why-use-azure-arc">🌍 Why Use Azure Arc?
-</h2><p>Arc is particularly valuable when:</p>
+<p>Welcome to the final part of the Azure Arc Deep Dive series. We&rsquo;ve covered what Azure Arc is, how to plan and deploy it, and where it shines in real-world scenarios.</p>
+<p>In this post, we’ll shift gears and share <strong>lessons learned</strong>, <strong>common pitfalls</strong>, and <strong>&ldquo;gotchas&rdquo;</strong> that you’re likely to encounter when deploying Arc in production.</p>
+<hr>
+<h2 id="-agent-performance-and-system-overhead">🐌 Agent Performance and System Overhead
+</h2><p>While lightweight in most cases, the <strong>Connected Machine Agent</strong> and <strong>Kubernetes agents</strong> can introduce:</p>
 <ul>
-<li>You have <strong>on-prem infrastructure</strong> but want Azure governance</li>
-<li>You&rsquo;re in a <strong>multi-cloud scenario</strong> and need centralised control</li>
-<li>You manage <strong>edge environments</strong> like retail or manufacturing</li>
-<li>You&rsquo;re aligning with <strong>compliance frameworks</strong> and need consistent auditability</li>
-<li>You want to deploy and manage <strong>Kubernetes at scale</strong> using GitOps and policy</li>
+<li>Memory and CPU overhead (especially on resource-constrained systems)</li>
+<li>Logging volume that can flood ingestion pipelines if not tuned</li>
+<li>DNS or proxy issues if outbound communication is filtered</li>
 </ul>
+<blockquote>
+<p>💡 Tip: Use Log Analytics agent filtering and monitor resource usage after onboarding.</p></blockquote>
 <hr>
-<h2 id="-how-arc-works-at-a-high-level">🏗️ How Arc Works (At a High Level)
-</h2><p>At its core, Arc-enabled resources install an <strong>agent</strong> that registers them with Azure. This agent connects outbound over the internet and enables:</p>
+<h2 id="-monitoring-and-visibility-limitations">🧩 Monitoring and Visibility Limitations
+</h2><p>Azure Arc gives you visibility — but <strong>not parity</strong> with native Azure resources:</p>
 <ul>
-<li>Identity: the resource becomes an Azure object with its own ID</li>
-<li>Configuration: it can be tagged, grouped, and assigned policy</li>
-<li>Monitoring: you can collect logs and metrics centrally</li>
-<li>Security: Defender for Cloud assessments apply</li>
-<li>Automation: integrate with Update Management, Automanage, and GitOps</li>
+<li>Update Management doesn’t support all OS types or edge scenarios</li>
+<li>Performance counters can be incomplete on certain Linux distros</li>
+<li>Guest Configuration may miss changes if not polled frequently</li>
 </ul>
-<p>We&rsquo;ll go deeper into these capabilities throughout the series.</p>
+<blockquote>
+<p>📝 Arc is powerful, but not a drop-in replacement for full Azure VMs.</p></blockquote>
 <hr>
-<h2 id="-coming-up">🚀 Coming Up
-</h2><p>In the next post, we&rsquo;ll cover <strong>what you need to do before onboarding resources</strong> — including agent compatibility, connectivity planning, and identity setup. These early steps are often overlooked and can lead to frustrating failures or governance gaps later on.</p>
+<h2 id="-azure-policy--guest-configuration-challenges">🧱 Azure Policy &amp; Guest Configuration Challenges
+</h2><ul>
+<li><code>DeployIfNotExists</code> often fails silently if permissions or network rules are missing</li>
+<li>Guest Configuration requires <strong>proper agent configuration</strong>, which may break if the machine is imaged or renamed</li>
+<li>Policies can appear as “compliant” but not actually apply remediation</li>
+</ul>
+<blockquote>
+<p>🔍 Always validate with a test resource group before assigning policies at scale.</p></blockquote>
 <hr>
-<p><em>Need help setting up Azure Arc for your environment? Reach out or connect with me on <a class="link" href="https://www.linkedin.com/in/YOUR-HANDLE"  target="_blank" rel="noopener"
-    >LinkedIn</a> or <a class="link" href="https://github.com/BarryShtPeas"  target="_blank" rel="noopener"
-    >GitHub</a>.</em></p>
+<h2 id="-security-assumptions-and-identity-pitfalls">🔒 Security Assumptions and Identity Pitfalls
+</h2><ul>
+<li>Machines onboarded with <strong>interactive logins</strong> may not persist identity across reboots or images</li>
+<li>Service principals must have very specific RBAC to enable consistent deployment</li>
+<li>If onboarding via automation, be careful not to expose credentials in pipeline logs or scripts</li>
+</ul>
+<blockquote>
+<p>✅ Use Managed Identity and Key Vault integrations wherever possible.</p></blockquote>
+<hr>
+<h2 id="-unexpected-billing-and-defender-costs">💸 Unexpected Billing and Defender Costs
+</h2><p>Azure Arc itself is free for basic use — <strong>but</strong>:</p>
+<ul>
+<li>Defender for Cloud plans <strong>do charge</strong> per node (server or cluster)</li>
+<li>GitOps sync, policy assignments, and Log Analytics <strong>can trigger hidden costs</strong></li>
+<li>Data ingestion from edge/remote sites may be expensive if not throttled</li>
+</ul>
+<blockquote>
+<p>📉 Use Cost Analysis and Azure Monitor filtering to stay within budget.</p></blockquote>
+<hr>
+<h2 id="-operational-gaps-in-large-scale-environments">🧰 Operational Gaps in Large-Scale Environments
+</h2><ul>
+<li>Bulk onboarding at scale can hit throttling limits or identity conflicts</li>
+<li>Monitoring config drift across 100s of resources becomes hard without automation</li>
+<li>Arc status alerts aren’t always real-time — disconnected devices can appear healthy for hours</li>
+</ul>
+<blockquote>
+<p>🔁 Combine Arc with Azure Lighthouse or custom alerts for enterprise-scale ops.</p></blockquote>
+<hr>
+<h2 id="-final-thoughts">🧭 Final Thoughts
+</h2><p>Azure Arc is an incredibly powerful tool — but it&rsquo;s not magic. Successful deployments depend on:</p>
+<ul>
+<li>Careful planning and connectivity validation</li>
+<li>Automation and IaC-first approaches</li>
+<li>Realistic expectations about parity and limitations</li>
+</ul>
+<p>Used well, Arc can unify management across fragmented infrastructure and give you a clean control plane for even the messiest environments.</p>
+<hr>
+<h2 id="-thanks-for-reading">🙏 Thanks for Reading
+</h2><p>This wraps up the <strong>Azure Arc Deep Dive</strong> series — I hope you’ve found it helpful. If you’ve used Arc in production, I’d love to hear your war stories, tips, or feedback.</p>
+<p>You can connect with me on <a class="link" href="https://www.linkedin.com/"  target="_blank" rel="noopener"
+    >LinkedIn</a> or contribute suggestions to the <a class="link" href="https://github.com/"  target="_blank" rel="noopener"
+    >GitHub repo</a>.</p>
+<p>Stay secure — and good luck wrangling your hybrid cloud!</p>
 
 </section>
 
@@ -377,6 +435,19 @@
             
                 
 <article class="">
+    <a href="/posts/arc/part-1/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Part 1: What is Azure Arc</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/posts/arc/part-2/">
         
         
@@ -409,19 +480,6 @@
 
         <div class="article-details">
             <h2 class="article-title">Part 4: Governance and Policy at Scale</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/posts/arc/part-5/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Part 5: Automation and GitOps with Azure Arc</h2>
         </div>
     </a>
 </article>

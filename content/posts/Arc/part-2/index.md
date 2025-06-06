@@ -2,7 +2,7 @@
 title: "Part 2: Azure Arc Setup: Pre-Requisites and Planning Gotchas"
 description: "Get Azure Arc right from the start: key tips on connectivity, identity, OS setup, and common planning pitfalls before onboarding your resources."
 date: 2025-06-05T10:30:57.028Z
-draft: false
+draft: true
 tags:
   - Azure
   - Azure Arc

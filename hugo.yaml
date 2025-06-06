@@ -27,13 +27,14 @@ services:
         id:
 
 pagination:
-    pagerSize: 3
+    pagerSize: 9
 
 permalinks:
     post: /p/:slug/
     page: /:slug/
 
 params:
+    robots: "noindex, nofollow" # Remember to remove this when going live!!!
     cover:
         hidden: false           # <-- Must be false to show on posts
         hiddenInList: false     # Optional: show in list views
@@ -53,7 +54,7 @@ params:
         lastUpdated: Jan 02, 2006 15:04 MST
 
     sidebar:
-        emoji: ❤️
+        emoji: ⛅
         subtitle: "Insights and practical guides on Microsoft Azure, cloud governance, and modern security tools — from architecture to implementation."
         avatar:
             enabled: true

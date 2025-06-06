@@ -62,7 +62,7 @@
                 
                 </a>
                 
-                    <span class="emoji">❤️</span>
+                    <span class="emoji">⛅</span>
                 
             </figure>
             
@@ -168,14 +168,10 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#overview">Overview</a></li>
-    <li><a href="#1-network-and-connectivity-requirements">1. Network and Connectivity Requirements</a></li>
-    <li><a href="#2-identity-and-access-management">2. Identity and Access Management</a></li>
-    <li><a href="#3-os-and-agent-requirements">3. OS and Agent Requirements</a></li>
-    <li><a href="#4-tagging-and-naming-standards">4. Tagging and Naming Standards</a></li>
-    <li><a href="#5-region-selection-and-resource-organization">5. Region Selection and Resource Organization</a></li>
-    <li><a href="#6-gotchas-summary">6. Gotchas Summary</a></li>
-    <li><a href="#up-next">Up Next</a></li>
+    <li><a href="#-what-exactly-is-azure-arc">🧩 What Exactly is Azure Arc?</a></li>
+    <li><a href="#-why-use-azure-arc">🌍 Why Use Azure Arc?</a></li>
+    <li><a href="#-how-arc-works-at-a-high-level">🏗️ How Arc Works (At a High Level)</a></li>
+    <li><a href="#-coming-up">🚀 Coming Up</a></li>
   </ol>
 </nav>
         </div>
@@ -277,82 +273,43 @@
 		data-flex-basis="301px"
 	
 ></p>
-<h2 id="overview">Overview
-</h2><p>Getting started with Azure Arc is deceptively easy — but getting it right takes forethought. This post breaks down essential pre-requisites and the most common traps that derail successful deployments.</p>
-<h2 id="1-network-and-connectivity-requirements">1. Network and Connectivity Requirements
-</h2><p>Azure Arc requires outbound HTTPS access on port 443 to several Azure endpoints. In restricted environments, this can be a blocker.</p>
+<p>Welcome to the first post in the Azure Arc Deep Dive series.</p>
+<p>In today’s hybrid and multicloud world, organisations increasingly struggle to manage and secure resources that live outside of Azure. Whether it&rsquo;s virtual machines running on-premises, Kubernetes clusters in AWS, or databases at the edge, traditional Azure tools have had limited reach — until now.</p>
+<p><strong>Azure Arc</strong> bridges this gap by extending Azure’s control plane to infrastructure hosted <em>anywhere</em>. It lets you project non-Azure resources into Azure Resource Manager (ARM), enabling unified management, governance, and security across environments.</p>
+<hr>
+<h2 id="-what-exactly-is-azure-arc">🧩 What Exactly is Azure Arc?
+</h2><p>Azure Arc is a portfolio of technologies designed to bring Azure’s management, policy, and security capabilities to:</p>
 <ul>
-<li>✅ <strong>Tip:</strong> Allowlist required FQDNs rather than IPs to stay future-proof.</li>
-<li>❗ <strong>Gotcha:</strong> Using a transparent proxy without SSL inspection may break onboarding.</li>
+<li><strong>Servers</strong> (Windows/Linux, physical or virtual)</li>
+<li><strong>Kubernetes clusters</strong> (including AKS on-prem, EKS, GKE)</li>
+<li><strong>SQL and PostgreSQL servers</strong> (preview/built-in support)</li>
+<li><strong>Applications</strong> via App Services and Logic Apps (Arc-enabled services)</li>
 </ul>
-<p><a class="link" href="https://learn.microsoft.com/en-us/azure/azure-arc/servers/network-requirements"  target="_blank" rel="noopener"
-    >🔗 Microsoft Docs: Required URLs for Arc</a></p>
-<h2 id="2-identity-and-access-management">2. Identity and Access Management
-</h2><p>You’ll need to register the <code>Microsoft.HybridCompute</code> and <code>Microsoft.GuestConfiguration</code> providers and assign roles correctly.</p>
+<p>Once onboarded, these resources behave like native Azure assets — you can assign RBAC, apply policy, monitor them in Azure Monitor, and even onboard them into Defender for Cloud.</p>
+<hr>
+<h2 id="-why-use-azure-arc">🌍 Why Use Azure Arc?
+</h2><p>Arc is particularly valuable when:</p>
 <ul>
-<li>✅ <strong>Best Practice:</strong> Use a dedicated Service Principal for onboarding at scale.</li>
-<li>❗ <strong>Gotcha:</strong> RBAC misconfiguration is a top reason onboarding fails silently.</li>
+<li>You have <strong>on-prem infrastructure</strong> but want Azure governance</li>
+<li>You&rsquo;re in a <strong>multi-cloud scenario</strong> and need centralised control</li>
+<li>You manage <strong>edge environments</strong> like retail or manufacturing</li>
+<li>You&rsquo;re aligning with <strong>compliance frameworks</strong> and need consistent auditability</li>
+<li>You want to deploy and manage <strong>Kubernetes at scale</strong> using GitOps and policy</li>
 </ul>
-<h2 id="3-os-and-agent-requirements">3. OS and Agent Requirements
-</h2><ul>
-<li>
-<p>Supported OS: Windows Server 2012 R2+, Ubuntu 16.04+, CentOS/RHEL 7+, etc.</p>
-</li>
-<li>
-<p>Ensure <code>Connected Machine Agent</code> has local admin privileges to install properly.</p>
-</li>
-<li>
-<p>✅ <strong>Best Practice:</strong> Bake the agent into base images for auto-onboarded VMs.</p>
-</li>
-<li>
-<p>❗ <strong>Gotcha:</strong> Server core installations often need additional tweaks or dependencies.</p>
-</li>
-</ul>
-<h2 id="4-tagging-and-naming-standards">4. Tagging and Naming Standards
-</h2><p>Set naming conventions and tags from the start — Arc doesn’t retro-tag easily.</p>
+<hr>
+<h2 id="-how-arc-works-at-a-high-level">🏗️ How Arc Works (At a High Level)
+</h2><p>At its core, Arc-enabled resources install an <strong>agent</strong> that registers them with Azure. This agent connects outbound over the internet and enables:</p>
 <ul>
-<li>Example naming format: <code>arc-[hostname]-[location]-[env]</code></li>
-<li>Use policy to enforce tags on connected machines</li>
+<li>Identity: the resource becomes an Azure object with its own ID</li>
+<li>Configuration: it can be tagged, grouped, and assigned policy</li>
+<li>Monitoring: you can collect logs and metrics centrally</li>
+<li>Security: Defender for Cloud assessments apply</li>
+<li>Automation: integrate with Update Management, Automanage, and GitOps</li>
 </ul>
-<h2 id="5-region-selection-and-resource-organization">5. Region Selection and Resource Organization
-</h2><ul>
-<li>Azure Arc resources are metadata-only — but they&rsquo;re tied to a region for management.</li>
-<li>Use a dedicated RG per site or environment to simplify governance.</li>
-</ul>
-<h2 id="6-gotchas-summary">6. Gotchas Summary
-</h2><div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th>Area</th>
-          <th>Pitfall</th>
-          <th>Solution</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Networking</td>
-          <td>Blocked domains</td>
-          <td>Allowlist required URLs</td>
-      </tr>
-      <tr>
-          <td>Identity</td>
-          <td>Missing role assignments</td>
-          <td>Use scoped Service Principals</td>
-      </tr>
-      <tr>
-          <td>OS Support</td>
-          <td>Agent fails on unsupported systems</td>
-          <td>Check OS compatibility first</td>
-      </tr>
-      <tr>
-          <td>Governance</td>
-          <td>Inconsistent tags/names</td>
-          <td>Apply policies early</td>
-      </tr>
-  </tbody>
-</table></div>
-<h2 id="up-next">Up Next
-</h2><p>In the next post, we’ll explore how to <strong>onboard resources to Azure Arc at scale</strong>, including PowerShell automation, DSC integrations, and template deployments.</p>
+<p>We&rsquo;ll go deeper into these capabilities throughout the series.</p>
+<hr>
+<h2 id="-coming-up">🚀 Coming Up
+</h2><p>In the next post, we&rsquo;ll cover <strong>what you need to do before onboarding resources</strong> — including agent compatibility, connectivity planning, and identity setup. These early steps are often overlooked and can lead to frustrating failures or governance gaps later on.</p>
 <hr>
 <p><em>Need help setting up Azure Arc for your environment? Reach out or connect with me on <a class="link" href="https://www.linkedin.com/in/YOUR-HANDLE"  target="_blank" rel="noopener"
     >LinkedIn</a> or <a class="link" href="https://github.com/BarryShtPeas"  target="_blank" rel="noopener"
@@ -407,12 +364,64 @@
             
                 
 <article class="">
+    <a href="/posts/arc/template/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Arc post template</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/posts/arc/part-2/">
         
         
 
         <div class="article-details">
             <h2 class="article-title">Part 2: Azure Arc Setup: Pre-Requisites and Planning Gotchas</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/arc/part-3/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Part 3: Onboarding and Agent Deployment</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/arc/part-4/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Part 4: Governance and Policy at Scale</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/arc/part-5/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Part 5: Automation and GitOps with Azure Arc</h2>
         </div>
     </a>
 </article>

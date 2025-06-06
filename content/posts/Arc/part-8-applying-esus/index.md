@@ -1,14 +1,14 @@
 ---
-title: "Part 7: Lessons Learned and Gotchas"
-description: "Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises."
+title: Extended Security Updates (ESUs) with Azure Arc, an overview
+description: "Applying Extended Security Updates (ESUs) with Azure Arc: What You Need to Know"
 date: 2025-06-05T10:30:57.028Z
 draft: false
 tags:
   - Azure
   - Azure Arc
-  - Hybrid Cloud
   - Cloud Management
-  - Governance
+  - Extended Support
+  - Hybrid Cloud
 categories:
   - Cloud Architecture
   - Azure Arc
@@ -26,117 +26,62 @@ cover:
 ---
 ![Image 1](ARC.png)
 
----
-title: "Part 7: Lessons Learned and Gotchas"
-description: "Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises."
-date: 2025-06-16
-draft: false
-tags:
-  - Azure Arc
-  - Deployment
-  - Troubleshooting
-  - Cost Management
-  - Best Practices
-categories:
-  - Azure Arc
-  - Lessons Learned
-series:
-  - Azure Arc Deep Dive
-cover:
-  image: gotchas.png
-  alt: Azure Arc Challenges
-  caption: Lessons from Real-World Deployments
-  relative: true
----
 
-Welcome to the final part of the Azure Arc Deep Dive series. We've covered what Azure Arc is, how to plan and deploy it, and where it shines in real-world scenarios.
+Another post in the Azure Arc Deep Dive series, this time covering Microsoft Extended Support Updates (ESUs).  Within the post I will talk about what ESUs are, the key dates for End of Support (EOS), procurement options, the supported scenarios, the 'must knows' and my own take on things.
 
-In this post, we’ll shift gears and share **lessons learned**, **common pitfalls**, and **"gotchas"** that you’re likely to encounter when deploying Arc in production.
 
 ---
 
-## 🐌 Agent Performance and System Overhead
+## 🧩 What Exactly are Extended Support Updates?
 
-While lightweight in most cases, the **Connected Machine Agent** and **Kubernetes agents** can introduce:
+Extended Security Updates (ESUs) are a Microsoft offering that provides critical and important security updates for legacy Windows Server and SQL Server versions that have reached end of support (EOS).
 
-- Memory and CPU overhead (especially on resource-constrained systems)
-- Logging volume that can flood ingestion pipelines if not tuned
-- DNS or proxy issues if outbound communication is filtered
-
-> 💡 Tip: Use Log Analytics agent filtering and monitor resource usage after onboarding.
+Normally, once a product hits EOS, Microsoft no longer provides patches or security updates — but ESUs extend that protection for up to three additional years, giving organisations more time to migrate or modernise.
 
 ---
 
-## 🧩 Monitoring and Visibility Limitations
+## 📅 Key Dates
 
-Azure Arc gives you visibility — but **not parity** with native Azure resources:
+Everyone should already be aware of the key ESU dates, they are published by Microsoft [here](https://learn.microsoft.com/en-us/lifecycle/faq/extended-security-updates#esu-availability-and-end-dates).  For the lazy and in a vain effort to keep your attention on this post, I've added the dates below:
 
-- Update Management doesn’t support all OS types or edge scenarios
-- Performance counters can be incomplete on certain Linux distros
-- Guest Configuration may miss changes if not polled frequently
+| Product                          | End of Extended Support / ESU Start Date | ESU End Date Year 1 | ESU End Date Year 2 | ESU End Date Year 3 | Type of Security Update |
+|----------------------------------|------------------------------------------|---------------------|---------------------|---------------------|-------------------------|
+| SQL Server 2012                  | July 12, 2022                            | July 11, 2023       | July 9, 2024        | July 8, 2025        | Critical                |
+| Windows Server 2012 / 2012R2    | October 10, 2023                         | October 8, 2024     | October 14, 2025    | October 13, 2026    | Critical, Important     |
+| SQL Server 2014                  | July 9, 2024                             | July 8, 2025        | July 14, 2026       | July 12, 2027       | Critical                |
 
-> 📝 Arc is powerful, but not a drop-in replacement for full Azure VMs.
-
----
-
-## 🧱 Azure Policy & Guest Configuration Challenges
-
-- `DeployIfNotExists` often fails silently if permissions or network rules are missing
-- Guest Configuration requires **proper agent configuration**, which may break if the machine is imaged or renamed
-- Policies can appear as “compliant” but not actually apply remediation
-
-> 🔍 Always validate with a test resource group before assigning policies at scale.
+There is no ESU availability for Server 2008 or older.
+> ❗The end date for SQL Server 2012 has already passed.  Applying ESU to SQL Server 2012 will grant access to three years of Critical updates but no more beyond July 8th 2025.
 
 ---
 
-## 🔒 Security Assumptions and Identity Pitfalls
+## 📅 Procurement Methods
 
-- Machines onboarded with **interactive logins** may not persist identity across reboots or images
-- Service principals must have very specific RBAC to enable consistent deployment
-- If onboarding via automation, be careful not to expose credentials in pipeline logs or scripts
+Microsoft provide various ways of procuring ESUs, the main methods are outlined here:
+| ESU Delivery Method           | Where It Applies                  | Pros                                                                 | Cons                                                                   |
+|------------------------------|-----------------------------------|----------------------------------------------------------------------|------------------------------------------------------------------------|
+| **Azure VMs**                | VMs hosted in Azure               | - Free ESUs included automatically                                   | - Requires full migration to Azure                                     |
+| **Azure Stack HCI**          | On-prem via Azure Stack HCI       | - ESUs included as part of the Azure Stack HCI subscription          | - Requires deployment of Azure Stack HCI infrastructure               |
+| **Azure Arc-Enabled Servers**| On-prem or 3rd-party cloud VMs    | - No KMS setup needed<br>- Centralised management via Azure<br>- Pay-as-you-go billing | - Requires Azure Arc onboarding<br>- Costs apply per eligible server   |
+| **Volume Licensing (VL)**    | On-premises environments          | - Traditional approach for large orgs<br>- No Azure dependency       | - Manual key management<br>- KMS/MAK setup required                    |
+| **Cloud Solution Provider (CSP)** | Customers using CSP licensing    | - Flexible pricing and procurement through partners                  | - Availability varies by region and CSP partner
 
-> ✅ Use Managed Identity and Key Vault integrations wherever possible.
+Take the following scenario:
+- Server 2012r2 VM
+- Server needs protecting with ESUs
+- Server will be decomissioned in 6 months time
 
----
+If the server was hosted within Azure, you could apply ESUs for free.
 
-## 💸 Unexpected Billing and Defender Costs
+If the server was hosted outside of Azure, you can apply the ESUs using either the VL, CSP or Azure Arc method, however.. you would have to procure ESUs in 1x year increments through any method other then Azure Arc.  The PAYG model makes the Azure Arc method really attractive.
 
-Azure Arc itself is free for basic use — **but**:
+There is however one small gotcha..
+### 💰 Backdated costs
+Microsoft will backdate the cost of each ESU license (outside of VMs hosted within Azure) to the start date irrispective of the procurement method - this can be incredibly costly and often a blocker to businesses procuring ESU.
 
-- Defender for Cloud plans **do charge** per node (server or cluster)
-- GitOps sync, policy assignments, and Log Analytics **can trigger hidden costs**
-- Data ingestion from edge/remote sites may be expensive if not throttled
-
-> 📉 Use Cost Analysis and Azure Monitor filtering to stay within budget.
-
----
-
-## 🧰 Operational Gaps in Large-Scale Environments
-
-- Bulk onboarding at scale can hit throttling limits or identity conflicts
-- Monitoring config drift across 100s of resources becomes hard without automation
-- Arc status alerts aren’t always real-time — disconnected devices can appear healthy for hours
-
-> 🔁 Combine Arc with Azure Lighthouse or custom alerts for enterprise-scale ops.
-
----
-
-## 🧭 Final Thoughts
-
-Azure Arc is an incredibly powerful tool — but it's not magic. Successful deployments depend on:
-
-- Careful planning and connectivity validation
-- Automation and IaC-first approaches
-- Realistic expectations about parity and limitations
-
-Used well, Arc can unify management across fragmented infrastructure and give you a clean control plane for even the messiest environments.
-
----
-
-## 🙏 Thanks for Reading
-
-This wraps up the **Azure Arc Deep Dive** series — I hope you’ve found it helpful. If you’ve used Arc in production, I’d love to hear your war stories, tips, or feedback.
-
-You can connect with me on [LinkedIn](https://www.linkedin.com/) or contribute suggestions to the [GitHub repo](https://github.com/).
-
-Stay secure — and good luck wrangling your hybrid cloud!
+The alternatives are:
+- Migrate the VM to Azure to take advantage of the free ESUs
+- Upgrade the VM to a later OS
+- Migrate the application to a later OS
+- Decommission the VM
+- ❗Continue to run the VM at risk❗

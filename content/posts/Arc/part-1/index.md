@@ -28,7 +28,7 @@ cover:
 
 Welcome to the first post in the Azure Arc Deep Dive series.
 
-In today’s hybrid and multicloud world, organisations increasingly struggle to manage and secure resources across multiple environments, locations and technology stacks. Whether it's virtual machines running on-premises, Kubernetes clusters in AWS, or databases at the edge, Azure tools have had limited reach — until now.
+In today’s hybrid and multicloud world, organisations increasingly struggle to manage and secure resources across multiple environments and technology stacks. Whether it's virtual machines running on-premises, Kubernetes clusters in AWS, or databases at the edge, Azure tools have had limited reach — until now.
 
 **Azure Arc** bridges this gap by extending Azure’s control plane to infrastructure hosted *anywhere*. It lets you project non-Azure resources into Azure Resource Manager (ARM), enabling unified management, governance, and security across environments.
 

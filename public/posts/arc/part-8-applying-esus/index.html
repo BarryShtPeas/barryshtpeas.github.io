@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises.">
-<title>Part 7: Lessons Learned and Gotchas</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Applying Extended Security Updates (ESUs) with Azure Arc: What You Need to Know">
+<title>Extended Security Updates (ESUs) with Azure Arc, an overview</title>
 
 <link rel='canonical' href='http://localhost:1313/posts/arc/part-8-applying-esus/'>
 
-<link rel="stylesheet" href="/scss/style.min.cfa5b1b0e78d61c00a14173992a1f3fa3b5c1b9fa34d023de959af564e7b19dd.css"><meta property='og:title' content="Part 7: Lessons Learned and Gotchas">
-<meta property='og:description' content="Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises.">
+<link rel="stylesheet" href="/scss/style.min.cfa5b1b0e78d61c00a14173992a1f3fa3b5c1b9fa34d023de959af564e7b19dd.css"><meta property='og:title' content="Extended Security Updates (ESUs) with Azure Arc, an overview">
+<meta property='og:description' content="Applying Extended Security Updates (ESUs) with Azure Arc: What You Need to Know">
 <meta property='og:url' content='http://localhost:1313/posts/arc/part-8-applying-esus/'>
 <meta property='og:site_name' content='Azure Technical Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='Azure' /><meta property='article:tag' content='Azure Arc' /><meta property='article:tag' content='Hybrid Cloud' /><meta property='article:tag' content='Cloud Management' /><meta property='article:tag' content='Governance' /><meta property='article:published_time' content='2025-06-05T10:30:57&#43;00:00'/><meta property='article:modified_time' content='2025-06-05T10:30:57&#43;00:00'/>
-<meta name="twitter:title" content="Part 7: Lessons Learned and Gotchas">
-<meta name="twitter:description" content="Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises.">
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='Azure' /><meta property='article:tag' content='Azure Arc' /><meta property='article:tag' content='Cloud Management' /><meta property='article:tag' content='Extended Support' /><meta property='article:tag' content='Hybrid Cloud' /><meta property='article:published_time' content='2025-06-05T10:30:57&#43;00:00'/><meta property='article:modified_time' content='2025-06-05T10:30:57&#43;00:00'/>
+<meta name="twitter:title" content="Extended Security Updates (ESUs) with Azure Arc, an overview">
+<meta name="twitter:description" content="Applying Extended Security Updates (ESUs) with Azure Arc: What You Need to Know">
     </head>
     <body class="
     article-page
@@ -168,14 +168,13 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#-agent-performance-and-system-overhead">🐌 Agent Performance and System Overhead</a></li>
-    <li><a href="#-monitoring-and-visibility-limitations">🧩 Monitoring and Visibility Limitations</a></li>
-    <li><a href="#-azure-policy--guest-configuration-challenges">🧱 Azure Policy &amp; Guest Configuration Challenges</a></li>
-    <li><a href="#-security-assumptions-and-identity-pitfalls">🔒 Security Assumptions and Identity Pitfalls</a></li>
-    <li><a href="#-unexpected-billing-and-defender-costs">💸 Unexpected Billing and Defender Costs</a></li>
-    <li><a href="#-operational-gaps-in-large-scale-environments">🧰 Operational Gaps in Large-Scale Environments</a></li>
-    <li><a href="#-final-thoughts">🧭 Final Thoughts</a></li>
-    <li><a href="#-thanks-for-reading">🙏 Thanks for Reading</a></li>
+    <li><a href="#-what-exactly-are-extended-support-updates">🧩 What Exactly are Extended Support Updates?</a></li>
+    <li><a href="#-key-dates">📅 Key Dates</a></li>
+    <li><a href="#-procurement-methods">📅 Procurement Methods</a>
+      <ol>
+        <li><a href="#-backdated-costs">💰 Backdated costs</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -207,12 +206,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/posts/arc/part-8-applying-esus/">Part 7: Lessons Learned and Gotchas</a>
+            <a href="/posts/arc/part-8-applying-esus/">Extended Security Updates (ESUs) with Azure Arc, an overview</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises.
+            Applying Extended Security Updates (ESUs) with Azure Arc: What You Need to Know
         </h3>
         
     </div>
@@ -273,105 +272,120 @@
 	
 	
 ></p>
+<p>Another post in the Azure Arc Deep Dive series, this time covering Microsoft Extended Support Updates (ESUs).  Within the post I will talk about what ESUs are, the key dates for End of Support (EOS), procurement options, the supported scenarios, the &lsquo;must knows&rsquo; and my own take on things.</p>
 <hr>
-<p>title: &ldquo;Part 7: Lessons Learned and Gotchas&rdquo;
-description: &ldquo;Hard lessons from real-world Azure Arc deployments: performance issues, monitoring limits, support boundaries, and billing surprises.&rdquo;
-date: 2025-06-16
-draft: false
-tags:</p>
+<h2 id="-what-exactly-are-extended-support-updates">🧩 What Exactly are Extended Support Updates?
+</h2><p>Extended Security Updates (ESUs) are a Microsoft offering that provides critical and important security updates for legacy Windows Server and SQL Server versions that have reached end of support (EOS).</p>
+<p>Normally, once a product hits EOS, Microsoft no longer provides patches or security updates — but ESUs extend that protection for up to three additional years, giving organisations more time to migrate or modernise.</p>
+<hr>
+<h2 id="-key-dates">📅 Key Dates
+</h2><p>Everyone should already be aware of the key ESU dates, they are published by Microsoft <a class="link" href="https://learn.microsoft.com/en-us/lifecycle/faq/extended-security-updates#esu-availability-and-end-dates"  target="_blank" rel="noopener"
+    >here</a>.  For the lazy and in a vain effort to keep your attention on this post, I&rsquo;ve added the dates below:</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>Product</th>
+          <th>End of Extended Support / ESU Start Date</th>
+          <th>ESU End Date Year 1</th>
+          <th>ESU End Date Year 2</th>
+          <th>ESU End Date Year 3</th>
+          <th>Type of Security Update</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>SQL Server 2012</td>
+          <td>July 12, 2022</td>
+          <td>July 11, 2023</td>
+          <td>July 9, 2024</td>
+          <td>July 8, 2025</td>
+          <td>Critical</td>
+      </tr>
+      <tr>
+          <td>Windows Server 2012 / 2012R2</td>
+          <td>October 10, 2023</td>
+          <td>October 8, 2024</td>
+          <td>October 14, 2025</td>
+          <td>October 13, 2026</td>
+          <td>Critical, Important</td>
+      </tr>
+      <tr>
+          <td>SQL Server 2014</td>
+          <td>July 9, 2024</td>
+          <td>July 8, 2025</td>
+          <td>July 14, 2026</td>
+          <td>July 12, 2027</td>
+          <td>Critical</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>There is no ESU availability for Server 2008 or older.</p>
+<blockquote>
+<p>❗The end date for SQL Server 2012 has already passed.  Applying ESU to SQL Server 2012 will grant access to three years of Critical updates but no more beyond July 8th 2025.</p></blockquote>
+<hr>
+<h2 id="-procurement-methods">📅 Procurement Methods
+</h2><p>Microsoft provide various ways of procuring ESUs, the main methods are outlined here:</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>ESU Delivery Method</th>
+          <th>Where It Applies</th>
+          <th>Pros</th>
+          <th>Cons</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Azure VMs</strong></td>
+          <td>VMs hosted in Azure</td>
+          <td>- Free ESUs included automatically</td>
+          <td>- Requires full migration to Azure</td>
+      </tr>
+      <tr>
+          <td><strong>Azure Stack HCI</strong></td>
+          <td>On-prem via Azure Stack HCI</td>
+          <td>- ESUs included as part of the Azure Stack HCI subscription</td>
+          <td>- Requires deployment of Azure Stack HCI infrastructure</td>
+      </tr>
+      <tr>
+          <td><strong>Azure Arc-Enabled Servers</strong></td>
+          <td>On-prem or 3rd-party cloud VMs</td>
+          <td>- No KMS setup needed<br>- Centralised management via Azure<br>- Pay-as-you-go billing</td>
+          <td>- Requires Azure Arc onboarding<br>- Costs apply per eligible server</td>
+      </tr>
+      <tr>
+          <td><strong>Volume Licensing (VL)</strong></td>
+          <td>On-premises environments</td>
+          <td>- Traditional approach for large orgs<br>- No Azure dependency</td>
+          <td>- Manual key management<br>- KMS/MAK setup required</td>
+      </tr>
+      <tr>
+          <td><strong>Cloud Solution Provider (CSP)</strong></td>
+          <td>Customers using CSP licensing</td>
+          <td>- Flexible pricing and procurement through partners</td>
+          <td>- Availability varies by region and CSP partner</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>Take the following scenario:</p>
 <ul>
-<li>Azure Arc</li>
-<li>Deployment</li>
-<li>Troubleshooting</li>
-<li>Cost Management</li>
-<li>Best Practices
-categories:</li>
-<li>Azure Arc</li>
-<li>Lessons Learned
-series:</li>
-<li>Azure Arc Deep Dive
-cover:
-image: gotchas.png
-alt: Azure Arc Challenges
-caption: Lessons from Real-World Deployments
-relative: true</li>
+<li>Server 2012r2 VM</li>
+<li>Server needs protecting with ESUs</li>
+<li>Server will be decomissioned in 6 months time</li>
 </ul>
-<hr>
-<p>Welcome to the final part of the Azure Arc Deep Dive series. We&rsquo;ve covered what Azure Arc is, how to plan and deploy it, and where it shines in real-world scenarios.</p>
-<p>In this post, we’ll shift gears and share <strong>lessons learned</strong>, <strong>common pitfalls</strong>, and <strong>&ldquo;gotchas&rdquo;</strong> that you’re likely to encounter when deploying Arc in production.</p>
-<hr>
-<h2 id="-agent-performance-and-system-overhead">🐌 Agent Performance and System Overhead
-</h2><p>While lightweight in most cases, the <strong>Connected Machine Agent</strong> and <strong>Kubernetes agents</strong> can introduce:</p>
+<p>If the server was hosted within Azure, you could apply ESUs for free.</p>
+<p>If the server was hosted outside of Azure, you can apply the ESUs using either the VL, CSP or Azure Arc method, however.. you would have to procure ESUs in 1x year increments through any method other then Azure Arc.  The PAYG model makes the Azure Arc method really attractive.</p>
+<p>There is however one small gotcha..</p>
+<h3 id="-backdated-costs">💰 Backdated costs
+</h3><p>Microsoft will backdate the cost of each ESU license (outside of VMs hosted within Azure) to the start date irrispective of the procurement method - this can be incredibly costly and often a blocker to businesses procuring ESU.</p>
+<p>The alternatives are:</p>
 <ul>
-<li>Memory and CPU overhead (especially on resource-constrained systems)</li>
-<li>Logging volume that can flood ingestion pipelines if not tuned</li>
-<li>DNS or proxy issues if outbound communication is filtered</li>
+<li>Migrate the VM to Azure to take advantage of the free ESUs</li>
+<li>Upgrade the VM to a later OS</li>
+<li>Migrate the application to a later OS</li>
+<li>Decommission the VM</li>
+<li>❗Continue to run the VM at risk❗</li>
 </ul>
-<blockquote>
-<p>💡 Tip: Use Log Analytics agent filtering and monitor resource usage after onboarding.</p></blockquote>
-<hr>
-<h2 id="-monitoring-and-visibility-limitations">🧩 Monitoring and Visibility Limitations
-</h2><p>Azure Arc gives you visibility — but <strong>not parity</strong> with native Azure resources:</p>
-<ul>
-<li>Update Management doesn’t support all OS types or edge scenarios</li>
-<li>Performance counters can be incomplete on certain Linux distros</li>
-<li>Guest Configuration may miss changes if not polled frequently</li>
-</ul>
-<blockquote>
-<p>📝 Arc is powerful, but not a drop-in replacement for full Azure VMs.</p></blockquote>
-<hr>
-<h2 id="-azure-policy--guest-configuration-challenges">🧱 Azure Policy &amp; Guest Configuration Challenges
-</h2><ul>
-<li><code>DeployIfNotExists</code> often fails silently if permissions or network rules are missing</li>
-<li>Guest Configuration requires <strong>proper agent configuration</strong>, which may break if the machine is imaged or renamed</li>
-<li>Policies can appear as “compliant” but not actually apply remediation</li>
-</ul>
-<blockquote>
-<p>🔍 Always validate with a test resource group before assigning policies at scale.</p></blockquote>
-<hr>
-<h2 id="-security-assumptions-and-identity-pitfalls">🔒 Security Assumptions and Identity Pitfalls
-</h2><ul>
-<li>Machines onboarded with <strong>interactive logins</strong> may not persist identity across reboots or images</li>
-<li>Service principals must have very specific RBAC to enable consistent deployment</li>
-<li>If onboarding via automation, be careful not to expose credentials in pipeline logs or scripts</li>
-</ul>
-<blockquote>
-<p>✅ Use Managed Identity and Key Vault integrations wherever possible.</p></blockquote>
-<hr>
-<h2 id="-unexpected-billing-and-defender-costs">💸 Unexpected Billing and Defender Costs
-</h2><p>Azure Arc itself is free for basic use — <strong>but</strong>:</p>
-<ul>
-<li>Defender for Cloud plans <strong>do charge</strong> per node (server or cluster)</li>
-<li>GitOps sync, policy assignments, and Log Analytics <strong>can trigger hidden costs</strong></li>
-<li>Data ingestion from edge/remote sites may be expensive if not throttled</li>
-</ul>
-<blockquote>
-<p>📉 Use Cost Analysis and Azure Monitor filtering to stay within budget.</p></blockquote>
-<hr>
-<h2 id="-operational-gaps-in-large-scale-environments">🧰 Operational Gaps in Large-Scale Environments
-</h2><ul>
-<li>Bulk onboarding at scale can hit throttling limits or identity conflicts</li>
-<li>Monitoring config drift across 100s of resources becomes hard without automation</li>
-<li>Arc status alerts aren’t always real-time — disconnected devices can appear healthy for hours</li>
-</ul>
-<blockquote>
-<p>🔁 Combine Arc with Azure Lighthouse or custom alerts for enterprise-scale ops.</p></blockquote>
-<hr>
-<h2 id="-final-thoughts">🧭 Final Thoughts
-</h2><p>Azure Arc is an incredibly powerful tool — but it&rsquo;s not magic. Successful deployments depend on:</p>
-<ul>
-<li>Careful planning and connectivity validation</li>
-<li>Automation and IaC-first approaches</li>
-<li>Realistic expectations about parity and limitations</li>
-</ul>
-<p>Used well, Arc can unify management across fragmented infrastructure and give you a clean control plane for even the messiest environments.</p>
-<hr>
-<h2 id="-thanks-for-reading">🙏 Thanks for Reading
-</h2><p>This wraps up the <strong>Azure Arc Deep Dive</strong> series — I hope you’ve found it helpful. If you’ve used Arc in production, I’d love to hear your war stories, tips, or feedback.</p>
-<p>You can connect with me on <a class="link" href="https://www.linkedin.com/"  target="_blank" rel="noopener"
-    >LinkedIn</a> or contribute suggestions to the <a class="link" href="https://github.com/"  target="_blank" rel="noopener"
-    >GitHub repo</a>.</p>
-<p>Stay secure — and good luck wrangling your hybrid cloud!</p>
 
 </section>
 
@@ -384,11 +398,11 @@ relative: true</li>
         
             <a href="/tags/azure-arc/">Azure Arc</a>
         
-            <a href="/tags/hybrid-cloud/">Hybrid Cloud</a>
-        
             <a href="/tags/cloud-management/">Cloud Management</a>
         
-            <a href="/tags/governance/">Governance</a>
+            <a href="/tags/extended-support/">Extended Support</a>
+        
+            <a href="/tags/hybrid-cloud/">Hybrid Cloud</a>
         
     </section>
 

@@ -61,6 +61,41 @@
           "title": "toc",
           "name": "toc",
           "type": "boolean"
+        },
+        {
+          "title": "images",
+          "name": "images",
+          "type": "choice",
+          "choices": [
+            "./hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg"
+          ]
+        },
+        {
+          "title": "cover",
+          "name": "cover",
+          "type": "fields",
+          "fields": [
+            {
+              "title": "image",
+              "name": "image",
+              "type": "image"
+            },
+            {
+              "title": "alt",
+              "name": "alt",
+              "type": "string"
+            },
+            {
+              "title": "caption",
+              "name": "caption",
+              "type": "string"
+            },
+            {
+              "title": "relative",
+              "name": "relative",
+              "type": "boolean"
+            }
+          ]
         }
       ]
     }

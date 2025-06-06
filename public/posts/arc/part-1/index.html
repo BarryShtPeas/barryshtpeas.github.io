@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Azure Arc description">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Introduction to Azure Arc: what it is, why it matters, and how it extends Azure management to on-premises, multicloud, and edge environments.">
 <title>Part 1: What is Azure Arc</title>
 
 <link rel='canonical' href='http://localhost:1313/posts/arc/part-1/'>
 
 <link rel="stylesheet" href="/scss/style.min.cfa5b1b0e78d61c00a14173992a1f3fa3b5c1b9fa34d023de959af564e7b19dd.css"><meta property='og:title' content="Part 1: What is Azure Arc">
-<meta property='og:description' content="Azure Arc description">
+<meta property='og:description' content="Introduction to Azure Arc: what it is, why it matters, and how it extends Azure management to on-premises, multicloud, and edge environments.">
 <meta property='og:url' content='http://localhost:1313/posts/arc/part-1/'>
 <meta property='og:site_name' content='Azure Technical Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='Azure' /><meta property='article:tag' content='Azure Arc' /><meta property='article:tag' content='Hybrid Cloud' /><meta property='article:tag' content='Cloud Management' /><meta property='article:tag' content='Governance' /><meta property='article:published_time' content='2025-06-05T10:30:57&#43;00:00'/><meta property='article:modified_time' content='2025-06-05T10:30:57&#43;00:00'/>
 <meta name="twitter:title" content="Part 1: What is Azure Arc">
-<meta name="twitter:description" content="Azure Arc description">
+<meta name="twitter:description" content="Introduction to Azure Arc: what it is, why it matters, and how it extends Azure management to on-premises, multicloud, and edge environments.">
     </head>
     <body class="
     article-page
@@ -212,7 +212,7 @@
     
         
         <h3 class="article-subtitle">
-            Azure Arc description
+            Introduction to Azure Arc: what it is, why it matters, and how it extends Azure management to on-premises, multicloud, and edge environments.
         </h3>
         
     </div>
@@ -263,7 +263,21 @@
     <section class="article-content">
     
     
-    <h2 id="overview">Overview
+    <p><img src="/posts/arc/part-1/ARC.png"
+	width="547"
+	height="436"
+	srcset="/posts/arc/part-1/ARC_hu_4296d6a985cc1c6.png 480w, /posts/arc/part-1/ARC_hu_dff0b6efc1c1557f.png 1024w"
+	loading="lazy"
+	
+		alt="Image 1"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="125"
+		data-flex-basis="301px"
+	
+></p>
+<h2 id="overview">Overview
 </h2><p>Getting started with Azure Arc is deceptively easy — but getting it right takes forethought. This post breaks down essential pre-requisites and the most common traps that derail successful deployments.</p>
 <h2 id="1-network-and-connectivity-requirements">1. Network and Connectivity Requirements
 </h2><p>Azure Arc requires outbound HTTPS access on port 443 to several Azure endpoints. In restricted environments, this can be a blocker.</p>

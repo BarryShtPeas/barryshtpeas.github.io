@@ -1,6 +1,6 @@
 ---
 title: "Part 2: Azure Arc Setup: Pre-Requisites and Planning Gotchas"
-description: "Before onboarding your resources to Azure Arc, it's crucial to get the foundations right. This post covers connectivity, identity, OS requirements, and the most common planning oversights."
+description: "Get Azure Arc right from the start: key tips on connectivity, identity, OS setup, and common planning pitfalls before onboarding your resources."
 date: 2025-06-05T10:30:57.028Z
 draft: true
 tags:
@@ -17,7 +17,12 @@ series:
 author: "author: James Lillystone"
 toc: true
 images:
-  - "./hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg"
+  - ARC.png
+cover:
+  image: ARC.png
+  alt: Azure Arc Overview
+  caption: Azure Arc
+  relative: true
 ---
 
 

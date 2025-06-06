@@ -34,6 +34,10 @@ permalinks:
     page: /:slug/
 
 params:
+    cover:
+        hidden: false           # <-- Must be false to show on posts
+        hiddenInList: false     # Optional: show in list views
+        hiddenInSingle: false   # <-- Must be false to show in post detail
     mainSections:
         - posts
     featuredImageField: image

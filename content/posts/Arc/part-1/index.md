@@ -1,6 +1,6 @@
 ---
 title: "Part 1: What is Azure Arc"
-description: "Azure Arc description"
+description: "Introduction to Azure Arc: what it is, why it matters, and how it extends Azure management to on-premises, multicloud, and edge environments."
 date: 2025-06-05T10:30:57.028Z
 draft: true
 tags:
@@ -17,9 +17,14 @@ series:
 author: "author: James Lillystone"
 toc: true
 images:
-  - "./hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg"
+  - ARC.png
+cover:
+  image: ARC.png
+  alt: Azure Arc Overview
+  caption: Azure Arc
+  relative: true
 ---
-
+![Image 1](ARC.png)
 ## Overview
 
 Getting started with Azure Arc is deceptively easy — but getting it right takes forethought. This post breaks down essential pre-requisites and the most common traps that derail successful deployments.

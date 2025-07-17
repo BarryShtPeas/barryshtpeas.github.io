@@ -1,7 +1,7 @@
 baseurl: https://example.com/
 languageCode: en-us
 theme: hugo-theme-stack
-title: Azure Technical Blog
+title: Azure Technical Blog (Testing pull requests)
 copyright: James Lillystone
 
 # Theme i18n support
